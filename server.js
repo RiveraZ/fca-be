@@ -12,7 +12,7 @@ app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}.`);
 });
 
-const addNotes = (note, title, allNotes, res) => {
+const addNotes = (note, title, allNotes) => {
   const noteElement = {
     id: allNotes.length === 0 ? 1 : allNotes[data.length - 1].id + 1,
     date: new Date().toString(),
@@ -22,8 +22,12 @@ const addNotes = (note, title, allNotes, res) => {
   };
   allNotes.push(noteElement);
   const newNotes = JSON.stringify(allNotes);
+  return newNotes;
+};
+
+const sendTestResponse = (allNotes, res) => {
   res.send({
-    newNotes,
+    allNotes,
     message: "For testing only",
     success: "Saved the note",
   });
@@ -40,5 +44,6 @@ app.post("/new_note", (req, res) => {
     throw new Error("Title is required");
   }
 
-  addNotes(note, title, data, res);
+  const newNotes = addNotes(note, title, data);
+  sendTestResponse(newNotes, res);
 });
