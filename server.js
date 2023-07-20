@@ -1,8 +1,10 @@
+require("dotenv").config();
 const data = require("./d_data.json");
 
 const express = require("express");
 const app = express();
 const PORT = 3001;
+const { MDB_USERNAME, MDB_PASSWORD } = process.env;
 
 app.get("/", (req, res) => {
   res.send(data);
