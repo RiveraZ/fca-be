@@ -1,10 +1,20 @@
 require("dotenv").config();
+const express = require("express");
+const mdb = require("mongodb");
 const data = require("./d_data.json");
 
-const express = require("express");
 const app = express();
 const PORT = 3001;
 const { MDB_USERNAME, MDB_PASSWORD } = process.env;
+
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+const mongoDB = `mongodb+srv://${MDB_USERNAME}:${MDB_PASSWORD}@cluster0.1fohwws.mongodb.net/?retryWrites=true&w=majority`;
+
+main().catch((err) => console.log(err));
+async function main() {
+  await mongoose.connect(mongoDB);
+}
 
 app.get("/", (req, res) => {
   res.send(data);
@@ -12,6 +22,7 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}.`);
+  console.log(mongoose.connection.readyState);
 });
 
 const addNotes = (note, title, allNotes) => {
